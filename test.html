@@ -1,0 +1,23 @@
+    <div id="app" class="container  px-6 ">
+        <!-- Vue content will be injected here -->
+        <div>
+            <h1 class="text-2xl font-bold mb-4">FILMS A-Z</h1>
+            
+            <div v-if="loading" class="text-center">
+                <p class="text-lg">Loading...</p>
+            </div>
+            
+            <div v-if="error" class="text-center text-red-500">
+                <p>{{ error }}</p>
+            </div>
+        
+            <div v-if="!loading && !error">
+                <ul class="space-y-4">
+                    <li v-for="(item, index) in results" :key="index" class="p-4 bg-white rounded-lg shadow">
+                        <h2 class="text-xl font-semibold">{{ item.title }}</h2>
+                        <p>{{ item.description }}</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
