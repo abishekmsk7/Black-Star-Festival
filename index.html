@@ -11,7 +11,7 @@
 <div id="app">
     <div class="w-full py-6 rounded-b-[40px] bg-black">
         <div class="container px-6">
-            <div class="flex w-full flex-wrap">
+            <div class="flex flex-wrap w-full">
                 <a href="/index.html" title="Black Star Festival 2024" class="text-lg  w-1/3  font-bold tracking-tighter opacity-100 | hover:opacity-80">
                     <img class="relative"  src="./dist/images/logo.png" alt="">
                 </a>
@@ -21,22 +21,22 @@
     <div class="w-full mt-6 bg-white">
         <div class="container px-6">
             <div class="flex flex-wrap"> 
-                <a href="" class="rounded-t-3xl border-t border-black border-x px-5 py-5 transition-all duration-200 block bg-primary-500 -mb-1 pb-12 ">
-                    <span class="px-4 block transition-all duration-400 text-2xl">Films A-Z</span>
+                <a href="" class="block px-5 py-5 pb-12 -mb-1 transition-all duration-200 border-t border-black rounded-t-3xl border-x bg-primary-500 ">
+                    <span class="block px-4 text-2xl transition-all duration-400">Films A-Z</span>
                 </a>
             </div>
         </div>
     </div>
-    <div class="w-full py-8 bg-primary-500 border-b border-t border-black border-x-0">
+    <div class="w-full py-8 border-t border-b border-black bg-primary-500 border-x-0">
         <div class="container px-6">
             <div class="flex flex-wrap items-center justify-between">
                 <div class="w-2/3">
                     <p class="text-3xl lg:text-6xl ">FILMS A-Z</p>
                 </div>
-                <div class="my-auto rounded-full w-1/3">
-                    <a class= "relative" href="">
-                        <img @mouseover="isHovered = true" class="ml-auto" src="./dist/svgs/filter.png" alt="Description of the image" width="50" height="50">
-                    </a>
+                <div class="w-1/3 my-auto rounded-full">
+                    <div class= "relative " >
+                        <img @click="isHovered = true" class="ml-auto cursor-pointer" src="./dist/svgs/filter.png" alt="Description of the image" width="50" height="50">
+                    </div>
                 </div>
             </div>
         </div>
@@ -47,14 +47,14 @@
         @mouseleave="isHovered = false"
         class="w-full bg-secondary-500 drop-shadow-lg  rounded-b-[40px] py-12  flex  justify-start items-center">
             <div class="container px-6">
-                <p class="font-heading w-full mb-4 text-3xl">Filter By </p>
+                <p class="w-full mb-4 text-3xl font-heading">Filter By </p>
                 <div class="w-full">
-                    <div class="flex flex-row justify-between  cursor-pointer  pb-3 border-b border-black w-1/2">  
+                    <div class="flex flex-row justify-between w-full pb-3 border-b border-black cursor-pointer lg:w-1/2">  
                         <p> Category/tag</p>
-                        <img v-if= "!isRadio"  @click="isRadio = true" class="rounded  transition-all duration-500  ml-auto" src="./dist/svgs/chevron-down.svg" alt="Description of the image" width="20" height="20">
-                        <img v-if="isRadio" @click="isRadio = false" class="rounded cursor-pointer ml-auto duration-500" src="./dist/svgs/chevron-up.svg" alt="Description of the image" width="20" height="20">
+                        <img v-if= "!isRadio"  @click="isRadio = true" class="ml-auto transition-all duration-500 rounded" src="./dist/svgs/chevron-down.svg" alt="Description of the image" width="20" height="20">
+                        <img v-if="isRadio" @click="isRadio = false" class="ml-auto duration-500 rounded cursor-pointer" src="./dist/svgs/chevron-up.svg" alt="Description of the image" width="20" height="20">
                     </div>
-                    <form class="duration-500 py-4 transition-all" v-if="isRadio ">
+                    <form class="py-4 transition-all duration-500" v-if="isRadio ">
                         <a href="" class="cursor-pointer | hover:underline">
                             <input type="radio" id="Cherry Street Pier" name="filter" value="Cherry Street Pier">
                             <label for="red">Cherry Street Pier</label><br>
@@ -102,7 +102,7 @@
         <div class="w-full py-16">
             <div class="container px-6">
                 <div>                    
-                    <div v-if="loading" class="h-screen w-full mx-auto my-auto text-center">
+                    <div v-if="loading" class="w-full h-screen mx-auto my-auto text-center">
                         <div class="loader"></div>
                     </div>
                     
@@ -112,25 +112,25 @@
 
                     <div v-if="!loading && !error">
                         <div class="flex flex-wrap -mx-2">
-                            <a :href="`${item.link}`" v-for="(item, index) in results" :key="index" class="px-2  mb-4 w-full lg:w-1/3">
-                                <div class="border flex flex-col flex-1 h-full  rounded-2xl  border-black p-2">
-                                    <div id="imageDiv" class="mb-4 flex-1 w-full ">
+                            <a :href="`${item.link}`" v-for="(item, index) in entries" :key="index" class="w-full px-2 mb-4 lg:w-1/3">
+                                <div class="flex flex-col flex-1 h-full p-2 border border-black rounded-2xl">
+                                    <div id="imageDiv" class="flex-1 w-full mb-4 ">
                                         <!-- {{item.acf.cover_image}} -->
                                         <img height class="rounded-xl  transition-all scale-100 | hover:scale-105" :src="getImageSrc(`${item.acf.cover_image}`)" alt="">
                                     </div>
                                     <div class="flex-1 | hover:underline"> 
-                                        <h2 class="font-normal font-heading text-2xl mb-2">{{ item.title.rendered }}</h2>
+                                        <h2 class="mb-2 text-2xl font-normal font-heading">{{ item.title.rendered }}</h2>
                                     </div>
-                                    <div class="mb-4 mt-auto  ">
+                                    <div class="mt-auto mb-4 ">
                                         <p class="">{{ item.acf.credits[0].name}}</p>
                                         <p class="">{{item.tags[0].name}}</p>
                                         <p class="">Runtime: {{item.acf.runtime}} minutes</p>
                                     </div>
-                                    <div class="flex  w-full mb-4 flex-wrap justify-start space-x-4">
-                                        <button class="rounded-full border border-black px-4 py-2">Read More</button>
-                                        <button class="rounded-full border border-black px-4 py-2">Watch Trailer</button>
+                                    <div class="flex flex-wrap justify-start w-full mb-4 space-x-4">
+                                        <button class="px-4 py-2 border border-black rounded-full">Read More</button>
+                                        <button class="px-4 py-2 border border-black rounded-full">Watch Trailer</button>
                                     </div>
-                                    <div class="flex w-full flex-wrap justify-start space-x-4">
+                                    <div class="flex flex-wrap justify-start w-full space-x-4">
                                         <img  class="" src="./dist/svgs/logo1.png" alt="Description of the image" width="40" height="40">
                                         <img class="" src="./dist/svgs/logo2.png" alt="Description of the image" width="40" height="40">
                                         <img class="" src="./dist/svgs/logo3.png" alt="Description of the image" width="40" height="40">
@@ -140,24 +140,27 @@
                         </div>
                     </div>
                 </div>
-                <div class="w-full flex justify-center mx-auto">
-                    <button @click="fetchData()" class="rounded-full border border-black px-4 py-2">Load More</button>
+                <div class="flex justify-center w-full mx-auto">
+                    <button @click="loadMore()" class="px-4 py-2 border border-black rounded-full">Load More</button>
+                </div>
+                <div v-if="loading2" class="w-full py-4 mx-auto my-auto text-center">
+                    <div class="loader"></div>
                 </div>
             </div>
 
         </div>
         <div class="w-full py-6 rounded-t-[40px] bg-[#D4CAFF]">
             <div class="container px-6">
-                <div class="flex w-full flex-wrap justify-between items-center ">
+                <div class="flex flex-wrap items-center justify-between w-full ">
                     <a href="/index.html" title="Black Star Festival 2024" class="text-lg px-4 mb-4 lg:mb-0  w-full lg:w-1/3  font-bold tracking-tighter opacity-100 | hover:opacity-80">
-                        <img class=" my-auto" src="./dist/images/footer.png" alt="">
+                        <img class="my-auto " src="./dist/images/footer.png" alt="">
                     </a>
-                    <div class="w-full mx-auto lg:w-1/3 my-auto flex flex-col lg:flex-row">
+                    <div class="flex flex-col w-full mx-auto my-auto lg:w-1/3 lg:flex-row">
                         <p class="px-1 mb-2 lg:mb-0  text-xs  | hover:opacity-80">Ⓒ 2024 All Rights Reserved</p>
                         <a class="px-1 mb-2 lg:mb-0 text-xs | hover:opacity-80" href=""><span>Terms</span></a>
                         <a class="px-1 mb-2 lg:mb-0  text-xs | hover:opacity-80" href=""><span>Privacy</span></a>
                     </div>
-                    <div class="w-full lg:w-1/3 my-auto">
+                    <div class="w-full my-auto lg:w-1/3">
                         <p class="text-sm px-1  | hover:opacity-80">Made with love by the unloved</p>
                     </div>
                 </div>

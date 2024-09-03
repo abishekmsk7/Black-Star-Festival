@@ -1,40 +1,46 @@
 new Vue({
     el: '#app',
     data: {
-        results: [], // This will hold the API data
         isHovered : false,
         isRadio : false, 
         loading: true,
+        loading2 : false,
         imageSrc: '',
         error: null,
         pagenumber: 0,
+        entries: [],
+        perPage: 9,
+        page: 1,
+        allLoaded: false
     },
     created() {
-        this.fetchData();
+        this.loadEntries();
     },
     methods: {
-        async fetchData() {
+        async loadEntries() {
             try {
-                number = this.pagenumber + 1  ;
-                this.pagenumber = number ;
-                console.log(number);
-                const response = await fetch('https://wp.blackstarfest.org/wp-json/wp/v2/festival-film?per_page=9&page='+number+'&_year=2024&rich=1&not_hidden=1'); // Replace with your API URL
-                
+                const response = await fetch(`https://wp.blackstarfest.org/wp-json/wp/v2/festival-film?per_page=${this.perPage}&page=${this.page}&_year=2024&rich=1&not_hidden=1`);
                 const data = await response.json();
-                this.results = data; // Assume the API returns an array of objects
+                this.entries = [...this.entries, ...data];
+                if (data.length < this.perPage) {
+                    this.allLoaded = true;
+                }
             } catch (err) {
                 this.error = 'Failed to load data';
             } finally {
                 this.loading = false;
+                this.loading2 = false;
             }
+        },
+        loadMore() {
+            this.loading2 = true ;
+            this.page++;
+            this.loadEntries();
         },
         getImageSrc(imageTag) {
             try {
-                // Regular expression to match the src attribute
                 const test = imageTag.replace("\\","");
-                // document.getElementById('imageDiv').innerHTML = imageTag.replace("\\","");
                 const srcMatch = test.match(/src="([^"]+)"/);
-                // console.log(srcMatch);
                 if (srcMatch) {
                   this.imageSrc = srcMatch[1];
                 }
