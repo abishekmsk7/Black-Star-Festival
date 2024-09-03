@@ -21,7 +21,7 @@
     <div class="w-full mt-6 bg-white">
         <div class="container px-6">
             <div class="flex flex-wrap"> 
-                <a href="" class="block px-5 py-5 pb-12 -mb-1 transition-all duration-200 border-t border-black rounded-t-3xl border-x bg-primary-500 ">
+                <a href="" class="block px-5 py-5 pb-12 -mb-1 transition-all duration-200 border-t border-black rounded-t-3xl border-x bg-primary-500 | hover:opacity-80 ">
                     <span class="block px-4 text-2xl transition-all duration-400">Films A-Z</span>
                 </a>
             </div>
@@ -55,43 +55,9 @@
                         <img v-if="isRadio" @click="isRadio = false" class="ml-auto duration-500 rounded cursor-pointer" src="./dist/svgs/chevron-up.svg" alt="Description of the image" width="20" height="20">
                     </div>
                     <form class="py-4 transition-all duration-500" v-if="isRadio ">
-                        <a href="" class="cursor-pointer | hover:underline">
-                            <input type="radio" id="Cherry Street Pier" name="filter" value="Cherry Street Pier">
-                            <label for="red">Cherry Street Pier</label><br>
-                        </a>
-                        <a href="" class="cursor-pointer | hover:underline">
-                            <input type="radio" id="Lightbox Film Center" name="filter" value="Lightbox Film Center">
-                            <label for="green">Lightbox Film Center</label><br>
-                        </a>
-                        <a href="" class="cursor-pointer | hover:underline ">
-                            <input type="radio" id="Morgan's Pier" name="filter" value="Morgan's Pier">
-                            <label for="blue">Morgan's Pier</label><br>
-                        </a>
-    
-                        <a href="" class="cursor-pointer | hover:underline">
-                            <input type="radio" id="Cherry Street Pier" name="filter" value="Cherry Street Pier">
-                            <label for="red">Cherry Street Pier</label><br>
-                        </a>
-                        <a href="" class="cursor-pointer | hover:underline">
-                            <input type="radio" id="Lightbox Film Center" name="filter" value="Lightbox Film Center">
-                            <label for="green">Lightbox Film Center</label><br>
-                        </a>
-                        <a href="" class="cursor-pointer | hover:underline">
-                            <input type="radio" id="Morgan's Pier" name="filter" value="Morgan's Pier">
-                            <label for="blue">Morgan's Pier</label><br>
-                        </a>
-    
-                        <a href="" class="cursor-pointer | hover:underline">
-                            <input type="radio" id="Cherry Street Pier" name="filter" value="Cherry Street Pier">
-                            <label for="red">Cherry Street Pier</label><br>
-                        </a>
-                        <a href="" class="cursor-pointer | hover:underline">
-                            <input type="radio" id="Lightbox Film Center" name="filter" value="Lightbox Film Center">
-                            <label for="green">Lightbox Film Center</label><br>
-                        </a>
-                        <a href="" class="cursor-pointer | hover:underline">
-                            <input type="radio" id="Morgan's Pier" name="filter" value="Morgan's Pier">
-                            <label for="blue">Morgan's Pier</label><br>
+                        <a @click="filter = true ; isHovered = false ; loading = true ; firstLoad = true ; loadEntries(`${item.id}`)" v-for="(item, index) in tags" :key="`${item.id}`" class="cursor-pointer | hover:underline">
+                            <input type="radio" id="`${item.id}`" name="filter" value="`${item.id}`">
+                            <label class="cursor-pointer" for="`${item.name}`">{{item.name}}</label><br>
                         </a>
                     </form>                                      
                 </div>
@@ -105,7 +71,6 @@
                     <div v-if="loading" class="w-full h-screen mx-auto my-auto text-center">
                         <div class="loader"></div>
                     </div>
-                    
                     <div v-if="error" class="text-center text-red-500">
                         <p>{{ error }}</p>
                     </div>
@@ -113,7 +78,7 @@
                     <div v-if="!loading && !error">
                         <div class="flex flex-wrap -mx-2">
                             <a :href="`${item.link}`" v-for="(item, index) in entries" :key="index" class="w-full px-2 mb-4 lg:w-1/3">
-                                <div class="flex flex-col flex-1 h-full p-2 border border-black rounded-2xl">
+                                <div class="flex flex-col flex-1 h-full p-4 border border-black rounded-2xl">
                                     <div id="imageDiv" class="flex-1 w-full mb-4 ">
                                         <!-- {{item.acf.cover_image}} -->
                                         <img height class="rounded-xl  transition-all scale-100 | hover:scale-105" :src="getImageSrc(`${item.acf.cover_image}`)" alt="">
@@ -127,8 +92,8 @@
                                         <p class="">Runtime: {{item.acf.runtime}} minutes</p>
                                     </div>
                                     <div class="flex flex-wrap justify-start w-full mb-4 space-x-4">
-                                        <button class="px-4 py-2 border border-black rounded-full">Read More</button>
-                                        <button class="px-4 py-2 border border-black rounded-full">Watch Trailer</button>
+                                        <button class="px-4 py-2 border border-black bg-primary-500 rounded-full  | hover:opacity-50">Read More</button>
+                                        <button class="px-4 py-2 border border-black bg-primary-500 rounded-full | hover:opacity-50">Watch Trailer</button>
                                     </div>
                                     <div class="flex flex-wrap justify-start w-full space-x-4">
                                         <img  class="" src="./dist/svgs/logo1.png" alt="Description of the image" width="40" height="40">
@@ -140,8 +105,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-center w-full mx-auto">
-                    <button @click="loadMore()" class="px-4 py-2 border border-black rounded-full">Load More</button>
+                <div v-if = "!allLoaded" class="flex justify-center w-full mx-auto">
+                    <button @click="loadMore()" class="px-4 py-2 border border-black rounded-full bg-primary-500 | hover:opacity-50">Load More</button>
                 </div>
                 <div v-if="loading2" class="w-full py-4 mx-auto my-auto text-center">
                     <div class="loader"></div>
@@ -149,7 +114,7 @@
             </div>
 
         </div>
-        <div class="w-full py-6 rounded-t-[40px] bg-[#D4CAFF]">
+        <div class="w-full py-6 rounded-t-[40px] bg-secondary-500">
             <div class="container px-6">
                 <div class="flex flex-wrap items-center justify-between w-full ">
                     <a href="/index.html" title="Black Star Festival 2024" class="text-lg px-4 mb-4 lg:mb-0  w-full lg:w-1/3  font-bold tracking-tighter opacity-100 | hover:opacity-80">

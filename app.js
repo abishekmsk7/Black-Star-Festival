@@ -9,21 +9,49 @@ new Vue({
         error: null,
         pagenumber: 0,
         entries: [],
-        perPage: 9,
+        id : 0,
+        tags:[],
+        filter: false,
+        firstLoad : false, 
         page: 1,
-        allLoaded: false
+        allLoaded: false,
     },
     created() {
         this.loadEntries();
+        this.loadTags();
     },
     methods: {
-        async loadEntries() {
+        async loadTags() {
             try {
-                const response = await fetch(`https://wp.blackstarfest.org/wp-json/wp/v2/festival-film?per_page=${this.perPage}&page=${this.page}&_year=2024&rich=1&not_hidden=1`);
+                const response = await fetch(`https://wp.blackstarfest.org/wp-json/wp/v2/eventive-tag?per_page=99&_year=2024`);
+                const data = await response.json();
+                this.tags = data; 
+            } catch (err) {
+                this.error = 'Failed to load data';
+            }
+        },
+        async loadEntries(id) {
+            try {
+                var response =''; 
+                if(this.filter ){
+                    this.id = id ;
+                    console.log(this.id , this.page++);
+                    if(this.firstLoad){
+                        this.entries =[];
+                        this.page = 1;
+                    }
+                    response = await fetch(`https://wp.blackstarfest.org/wp-json/wp/v2/festival-film?per_page=9&page=${this.page}&_year=2024&rich=1&not_hidden=1&eventive-tag=${this.id}`);
+                }
+                else{
+                    response = await fetch(`https://wp.blackstarfest.org/wp-json/wp/v2/festival-film?per_page=9&page=${this.page}&_year=2024&rich=1&not_hidden=1`);
+                }
                 const data = await response.json();
                 this.entries = [...this.entries, ...data];
                 if (data.length < this.perPage) {
+                    console.log('full');
                     this.allLoaded = true;
+                    this.firstLoad = false;
+                    // this.id = 0;
                 }
             } catch (err) {
                 this.error = 'Failed to load data';
@@ -35,7 +63,8 @@ new Vue({
         loadMore() {
             this.loading2 = true ;
             this.page++;
-            this.loadEntries();
+            this.firstLoad = false;
+            this.loadEntries(this.id);
         },
         getImageSrc(imageTag) {
             try {
