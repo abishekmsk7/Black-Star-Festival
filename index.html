@@ -6,8 +6,6 @@
     <title>Black Star Festival</title>
     <link href="dist/output.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-    <script src="app.js"></script>
 </head>
 <body class="">
 <div id="app">
@@ -39,7 +37,7 @@
                 </div>
                 <div class="w-1/3 my-auto rounded-full">
                     <div class= "relative " >
-                        <img @click="isHovered = true" class="ml-auto cursor-pointer" src="./dist/svgs/filter.png" alt="Description of the image" width="50" height="50">
+                        <img @click="isHovered = true" class="ml-auto w-[50px] h-[50px] cursor-pointer | hover:scale-90" src="./dist/svgs/filter.png" alt="Filter Tag" >
                     </div>
                 </div>
             </div>
@@ -51,12 +49,15 @@
         @mouseleave="isHovered = false"
         class="w-full bg-secondary-500 drop-shadow-lg  rounded-b-[40px] py-12  flex  justify-start items-center">
             <div class="container px-6">
-                <p class="w-full mb-4 text-3xl font-heading">Filter By </p>
+                <div class="flex flex-row items-center justify-between mb-4">
+                    <p class="w-full text-3xl font-heading">Filter By</p>
+                    <img @click="isHovered = false" class="ml-auto  w-[25px] h-[25px] lg:w-[50px] lg:h-[50px]  cursor-pointer | hover:scale-90" src="./dist/svgs/close.png" alt="Close Tag">                    
+                </div>
                 <div class="w-full">
                     <div class="flex flex-row justify-between w-full pb-3 border-b border-black cursor-pointer lg:w-1/2">  
                         <p> Category/tag</p>
-                        <img v-if= "!isRadio"  @click="isRadio = true" class="ml-auto transition-all duration-500 rounded" src="./dist/svgs/chevron-down.svg" alt="Description of the image" width="20" height="20">
-                        <img v-if="isRadio" @click="isRadio = false" class="ml-auto duration-500 rounded cursor-pointer" src="./dist/svgs/chevron-up.svg" alt="Description of the image" width="20" height="20">
+                        <img v-if= "!isRadio"  @click="isRadio = true" class="ml-auto transition-all duration-500 rounded" src="./dist/svgs/chevron-down.svg" alt="Chevron Down" width="20" height="20">
+                        <img v-if="isRadio" @click="isRadio = false" class="ml-auto duration-500 rounded cursor-pointer" src="./dist/svgs/chevron-up.svg" alt="Chevron Up" width="20" height="20">
                     </div>
                     <form class="py-4 transition-all duration-500" v-if="isRadio ">
                         <a @click="filter = true ; isHovered = false ; loading = true ; firstLoad = true ; loadEntries(`${item.id}`)" v-for="(item, index) in tags" :key="`${item.id}`" class="cursor-pointer | hover:underline">
@@ -108,15 +109,15 @@
                                     </div>
                                 </div>
                             </a>
-
+                        </div>
+                        <div v-if = "!allLoaded" class="flex justify-center w-full mx-auto">
+                            <button @click="loadMore()" class="px-4 py-2 border border-black rounded-full bg-primary-500 | hover:bg-black hover:text-white">Load More</button>
+                        </div>
+                        <div v-if="loading2"  class="w-full py-4 mx-auto my-auto text-center">
+                            <div class="loader"></div>
                         </div>
                     </div>
-                    <div v-if = "!allLoaded" class="flex justify-center w-full mx-auto">
-                        <button @click="loadMore()" class="px-4 py-2 border border-black rounded-full bg-primary-500 | hover:bg-black hover:text-white">Load More</button>
-                    </div>
-                    <div v-if="loading2"  class="w-full py-4 mx-auto my-auto text-center">
-                        <div class="loader"></div>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -124,7 +125,7 @@
         <div class="w-full py-6 rounded-t-[40px] bg-secondary-500">
             <div class="container px-6">
                 <div class="flex flex-wrap items-center justify-between w-full ">
-                    <a href="/index.html" title="Black Star Festival 2024" class="text-lg px-4 mb-4 lg:mb-0  w-full lg:w-1/3  font-bold tracking-tighter opacity-100 | hover:opacity-80">
+                    <a href="/index.html" title="Black Star Festival 2024" class="text-lg mb-4 lg:mb-0  w-full lg:w-1/3  font-bold tracking-tighter opacity-100 | hover:opacity-80">
                         <img class="my-auto " src="./dist/images/footer.png" alt="">
                     </a>
                     <div class="flex flex-col w-full mx-auto my-auto lg:w-1/3 lg:flex-row">
@@ -132,14 +133,16 @@
                         <a class="px-1 mb-2 lg:mb-0 text-xs | hover:opacity-80" href=""><span>Terms</span></a>
                         <a class="px-1 mb-2 lg:mb-0  text-xs | hover:opacity-80" href=""><span>Privacy</span></a>
                     </div>
-                    <div class="w-full my-auto lg:w-1/3">
-                        <p class="text-sm px-1  | hover:opacity-80">Made with love by the unloved</p>
-                    </div>
+                    <a href="" class="flex flex-row items-center w-full my-auto space-x-1 lg:w-1/3 | hover:underline">
+                        <p class="text-sm px-1  | hover:opacity-80">Made with love by the unloved </p>
+                        <img @click="isHovered = false" class="ml-auto  w-[25px] h-[25px]  cursor-pointer" src="./dist/svgs/unloved.svg" alt="Unloved Heart"></span>
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
