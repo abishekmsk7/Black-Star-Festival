@@ -6,13 +6,16 @@
     <title>Black Star Festival</title>
     <link href="dist/output.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="app.js"></script>
 </head>
 <body class="">
 <div id="app">
+    <!-- Header -->
     <div class="w-full py-6 rounded-b-[40px] bg-black">
         <div class="container px-6">
             <div class="flex flex-wrap w-full">
-                <a href="/index.html" title="Black Star Festival 2024" class="text-lg  w-1/3  font-bold tracking-tighter opacity-100 | hover:opacity-80">
+                <a href="" title="Black Star Festival 2024" class="text-lg  w-1/2  font-bold tracking-tighter opacity-100 | hover:opacity-80">
                     <img class="relative"  src="./dist/images/logo.png" alt="">
                 </a>
             </div>
@@ -21,12 +24,13 @@
     <div class="w-full mt-6 bg-white">
         <div class="container px-6">
             <div class="flex flex-wrap"> 
-                <a href="" class="block px-5 py-5 pb-12 -mb-1 transition-all duration-200 border-t border-black rounded-t-3xl border-x bg-primary-500 | hover:opacity-80 ">
-                    <span class="block px-4 text-2xl transition-all duration-400">Films A-Z</span>
+                <a href="" class="block px-5 pt-5 pb-12 -mb-1  border-t border-black rounded-t-3xl border-x bg-primary-500 | hover:opacity-80 ">
+                    <span class="block px-4 text-2xl ">Films A-Z</span>
                 </a>
             </div>
         </div>
     </div>
+    <!-- Navigation and filter -->
     <div class="w-full py-8 border-t border-b border-black bg-primary-500 border-x-0">
         <div class="container px-6">
             <div class="flex flex-wrap items-center justify-between">
@@ -64,6 +68,7 @@
             </div>
         </div>
     </div>
+    <!-- Filmography and content -->
     <div class="bg-primary-500">
         <div class="w-full py-16">
             <div class="container px-6">
@@ -74,26 +79,27 @@
                     <div v-if="error" class="text-center text-red-500">
                         <p>{{ error }}</p>
                     </div>
-
+                    <div v-if="noResult" class="h-screen font-bold text-center text-black font-heading">
+                        <p class="text-2xl">No films found. Please search for another tag</p>
+                    </div>
                     <div v-if="!loading && !error">
                         <div class="flex flex-wrap -mx-2">
                             <a :href="`${item.link}`" v-for="(item, index) in entries" :key="index" class="w-full px-2 mb-4 lg:w-1/3">
                                 <div class="flex flex-col flex-1 h-full p-4 border border-black rounded-2xl">
                                     <div id="imageDiv" class="flex-1 w-full mb-4 ">
-                                        <!-- {{item.acf.cover_image}} -->
-                                        <img height class="rounded-xl  transition-all scale-100 | hover:scale-105" :src="getImageSrc(`${item.acf.cover_image}`)" alt="">
+                                        <img class="rounded-xl border border-black transition-all scale-100 | hover:scale-105" :src="getImageSrc(`${item.acf.cover_image}`)" alt="">
                                     </div>
                                     <div class="flex-1 | hover:underline"> 
                                         <h2 class="mb-2 text-2xl font-normal font-heading">{{ item.title.rendered }}</h2>
                                     </div>
                                     <div class="mt-auto mb-4 ">
-                                        <p class="">{{ item.acf.credits[0].name}}</p>
-                                        <p class="">{{item.tags[0].name}}</p>
-                                        <p class="">Runtime: {{item.acf.runtime}} minutes</p>
+                                        <p class="text-md">{{ item.acf.credits[0].name}}</p>
+                                        <p class="text-md">{{item.tags[0].name}}</p>
+                                        <p class="text-md">Runtime: {{item.acf.runtime}} minutes</p>
                                     </div>
                                     <div class="flex flex-wrap justify-start w-full mb-4 space-x-4">
-                                        <button class="px-4 py-2 border border-black bg-primary-500 rounded-full  | hover:opacity-50">Read More</button>
-                                        <button class="px-4 py-2 border border-black bg-primary-500 rounded-full | hover:opacity-50">Watch Trailer</button>
+                                        <button class="px-4 py-2 border border-black bg-primary-500 rounded-full  | hover:bg-black hover:text-white ">Read More</button>
+                                        <button class="px-4 py-2 border border-black bg-primary-500 rounded-full | hover:bg-black hover:text-white">Watch Trailer</button>
                                     </div>
                                     <div class="flex flex-wrap justify-start w-full space-x-4">
                                         <img  class="" src="./dist/svgs/logo1.png" alt="Description of the image" width="40" height="40">
@@ -102,18 +108,19 @@
                                     </div>
                                 </div>
                             </a>
+
                         </div>
                     </div>
-                </div>
-                <div v-if = "!allLoaded" class="flex justify-center w-full mx-auto">
-                    <button @click="loadMore()" class="px-4 py-2 border border-black rounded-full bg-primary-500 | hover:opacity-50">Load More</button>
-                </div>
-                <div v-if="loading2" class="w-full py-4 mx-auto my-auto text-center">
-                    <div class="loader"></div>
+                    <div v-if = "!allLoaded" class="flex justify-center w-full mx-auto">
+                        <button @click="loadMore()" class="px-4 py-2 border border-black rounded-full bg-primary-500 | hover:bg-black hover:text-white">Load More</button>
+                    </div>
+                    <div v-if="loading2"  class="w-full py-4 mx-auto my-auto text-center">
+                        <div class="loader"></div>
+                    </div>
                 </div>
             </div>
-
         </div>
+        <!-- Footer -->
         <div class="w-full py-6 rounded-t-[40px] bg-secondary-500">
             <div class="container px-6">
                 <div class="flex flex-wrap items-center justify-between w-full ">
@@ -134,9 +141,5 @@
     </div>
 
 </div>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-    <script src="app.js"></script>
 </body>
 </html>

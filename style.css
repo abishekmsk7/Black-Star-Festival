@@ -6,6 +6,7 @@
 @font-face {
     font-family: 'Matter';
     src: url('/dist/fonts/Matter-Medium.woff') format('woff2'),
+        url('/dist/fonts/Matter-Regular.woff') format('woff2'),
          url('/dist/fonts/Panama-Bold.woff') format('woff2')/* Modern Browsers */
          url('/dist/fonts/.woff') format('woff'); /* Older Browsers */
   }
@@ -48,6 +49,9 @@
     }
 }
 .heading{
+    font-family: 'Matter', sans-serif;
+}
+h1,h2,h3,h4{
     font-family: 'Matter', sans-serif;
 }
 option{

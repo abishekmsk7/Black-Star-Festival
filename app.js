@@ -7,13 +7,14 @@ new Vue({
         loading2 : false,
         imageSrc: '',
         error: null,
-        pagenumber: 0,
         entries: [],
         id : 0,
         tags:[],
         filter: false,
         firstLoad : false, 
         page: 1,
+        perPage: 9,
+        noResult:false,
         allLoaded: false,
     },
     created() {
@@ -35,7 +36,6 @@ new Vue({
                 var response =''; 
                 if(this.filter ){
                     this.id = id ;
-                    console.log(this.id , this.page++);
                     if(this.firstLoad){
                         this.entries =[];
                         this.page = 1;
@@ -47,11 +47,13 @@ new Vue({
                 }
                 const data = await response.json();
                 this.entries = [...this.entries, ...data];
+                if(this.entries.length == 0)
+                    {
+                        this.noResult = true;
+                    }
                 if (data.length < this.perPage) {
-                    console.log('full');
                     this.allLoaded = true;
                     this.firstLoad = false;
-                    // this.id = 0;
                 }
             } catch (err) {
                 this.error = 'Failed to load data';
