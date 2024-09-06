@@ -33,6 +33,8 @@ new Vue({
         },
         async loadEntries(id) {
             try {
+                this.noResult = false;
+                this.allLoaded = false;
                 var response =''; 
                 if(this.filter ){
                     this.id = id ;
@@ -40,10 +42,20 @@ new Vue({
                         this.entries =[];
                         this.page = 1;
                     }
-                    response = await fetch(`https://wp.blackstarfest.org/wp-json/wp/v2/festival-film?per_page=9&page=${this.page}&_year=2024&rich=1&not_hidden=1&eventive-tag=${this.id}`);
+                    response = await fetch(`https://wp.blackstarfest.org/wp-json/wp/v2/festival-film?per_page=9&page=${this.page}&_year=2024&rich=1&not_hidden=1&eventive-tag=${this.id}`, {
+                        headers: {
+                            'Content-Type': 'application/json; charset=UTF-8',
+                            'Accept': 'application/json',
+                        }
+                    });
                 }
                 else{
-                    response = await fetch(`https://wp.blackstarfest.org/wp-json/wp/v2/festival-film?per_page=9&page=${this.page}&_year=2024&rich=1&not_hidden=1`);
+                    response = await fetch(`https://wp.blackstarfest.org/wp-json/wp/v2/festival-film?per_page=9&page=${this.page}&_year=2024&rich=1&not_hidden=1`, {
+                        headers: {
+                            'Content-Type': 'application/json; charset=UTF-8',
+                            'Accept': 'application/json',
+                        }
+                    });
                 }
                 const data = await response.json();
                 this.entries = [...this.entries, ...data];
