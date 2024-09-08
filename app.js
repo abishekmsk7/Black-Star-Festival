@@ -8,6 +8,7 @@ new Vue({
         imageSrc: '',
         error: null,
         entries: [],
+        selectedFilters: [],
         id : 0,
         tags:[],
         filter: false,
@@ -35,14 +36,15 @@ new Vue({
             try {
                 this.noResult = false;
                 this.allLoaded = false;
+                const filterIds = this.selectedFilters.join(',');
                 var response =''; 
-                if(this.filter ){
+                if(this.filter){
                     this.id = id ;
                     if(this.firstLoad){
                         this.entries =[];
                         this.page = 1;
                     }
-                    response = await fetch(`https://wp.blackstarfest.org/wp-json/wp/v2/festival-film?per_page=9&page=${this.page}&_year=2024&rich=1&not_hidden=1&eventive-tag=${this.id}`, {
+                    response = await fetch(`https://wp.blackstarfest.org/wp-json/wp/v2/festival-film?per_page=9&page=${this.page}&_year=2024&rich=1&not_hidden=1&eventive-tag=${filterIds}`, {
                         headers: {
                             'Content-Type': 'application/json; charset=UTF-8',
                             'Accept': 'application/json',
@@ -92,6 +94,42 @@ new Vue({
                 this.error = 'Failed to load Image' + err;
             } 
         },
+        getAccessibilityImageSrc(name) {
+            switch(name)
+            {
+                case "Audio Description": return "./dist/svgs/logo1.png";
+                case "Open Captions": return "./dist/svgs/logo2.png";
+                case "Closed Captioning": return "./dist/svgs/logo3.png";
+                default: return "./dist/svgs/logo1.png"; 
+            }
+        },
+        displayTrailerButton(trailer) {
+            if(!trailer)
+                return false;
+            else
+                return true;
+        },
+        showTrailerModal(trailerHtml) {
+            document.getElementById('trailerHtml').innerHTML=trailerHtml;
+            document.getElementById('trailerModal').style.display='flex';
+            const iframe = document.querySelector('#trailerHtml iframe');
+            iframe.style.width = '100%';  // Set your desired width
+            iframe.style.height = '450px';
+        },
+        closeTrailerModal() {
+            document.getElementById('trailerHtml').innerHTML='';
+            document.getElementById('trailerModal').style.display='none';
+        },
+        decodeHtmlEntities(str) {
+            const txt = document.createElement('textarea');
+            txt.innerHTML = str;
+            return txt.value;
+        },
+        toggleFilter(id) {
+            this.filter = this.selectedFilters.length > 0;
+            this.firstLoad = true;
+            this.loadEntries();
+        }
     },
 });
 
